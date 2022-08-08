@@ -1,3 +1,23 @@
-.time {
+h1 {
+    text-align: center;
+}
+
+p {
+    text-align: center;
+}
+
+.timer {
     text-align: right;
+}
+
+button {
+    margin-left: 45%;
+}
+
+.a2, .a3, .a4{
+    display: none;
+}
+
+h3 {
+    display: none;
 }
