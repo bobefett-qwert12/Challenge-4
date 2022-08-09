@@ -22,15 +22,17 @@ function setTime() {
 }
 
 for(var j = 0; j < buttonEl.length; j++){
-    buttonEl[j].addEventListener("click", function(){
+    buttonEl[j].addEventListener("click", function(event){
         currentQuestion++;
         //Checks if last answer was correct
-        //if (buttonEl[j].dataset.answer === "right"){
-        //    h3El.textContent = "Correct!";
-        //} else if (buttonEl[j].dataset.answer === "wrong"){
-        //    h3El.textContent = "Wrong!";
-        //    secondsLeft -= 10;
-        //};
+        if (currentQuestion > 2){
+            if (event.target.dataset.answer === "right"){
+                h3El.textContent = "Correct!";
+             } else if (event.target.dataset.answer === "wrong"){
+                h3El.textContent = "Wrong!";
+                secondsLeft -= 10;
+             };
+        }
         //Sets the current question, sets buttons as answers
         if (currentQuestion === 1){
             setTime();
