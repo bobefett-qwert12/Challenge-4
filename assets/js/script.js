@@ -7,10 +7,13 @@ var buttonEl = document.querySelectorAll("button");
 var h1El = document.querySelector("h1");
 var h3El = document.querySelector("h3");
 var pEl = document.querySelectorAll("p");
-var formEl = document.createElement("form");
+var formEl = document.querySelector("form");
+var listEl = document.querySelector("ul");
+var asideEl = document.querySelector("aside");
 var inputTextEl = document.createElement("input");
 var inputSubmitEl = document.createElement("input");
 var timerInterval;
+var scores = [];
 
 function setTime() {
     // Sets interval in variable
@@ -27,6 +30,8 @@ function setTime() {
 
 function handleTimeout(text) {
     h1El.textContent = text;
+    formEl.setAttribute("style", "display: block;");
+    // Hides buttons
     for(var i=0; i<buttonEl.length; i++){
         buttonEl[i].setAttribute("style", "display: none;");
     }
@@ -34,12 +39,13 @@ function handleTimeout(text) {
     inputSubmitEl.setAttribute("type", "submit");
     inputTextEl.setAttribute("style", "display: block;");
     inputSubmitEl.setAttribute("style", "display: block;");
+    inputSubmitEl.setAttribute("class", "submit");
     var h3FormEl = document.createElement("h3");
     h3FormEl.textContent = "Input your initials and submit your time!";
+    // Adds form contents to body
     formEl.appendChild(h3FormEl);
     formEl.appendChild(inputTextEl);
     formEl.appendChild(inputSubmitEl);
-    document.body.appendChild(formEl);
 }
 
 for(var j = 0; j < buttonEl.length; j++){
@@ -115,3 +121,23 @@ for(var j = 0; j < buttonEl.length; j++){
         };
     });
 }
+
+formEl.addEventListener("click", ".submit", function(event){
+    event.preventDefault();
+    // Saves score to local storage
+    if (!inputTextEl.value()){
+        alert("Please enter your initials to save your score.");
+    } else{
+        var currentScore = inputTextEl.value();
+        scores.append(currentScore);
+        localStorage.setItem(currentScore, currentScore + ": " + finalScore);
+    }
+    // Displays all scores
+    asideEl.setAttribute("style", "display: inline;");
+    listEl.setAttribute("style", "display: block;");
+    for(var i=0; i<scores.length; i++){
+        var liEl = document.createElement("li");
+        liEl.textContent = localStorage.getItem(scores[i]);
+        listEl.appendChild(liEl);
+    }
+});
