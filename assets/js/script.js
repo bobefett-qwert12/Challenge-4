@@ -7,10 +7,14 @@ var buttonEl = document.querySelectorAll("button");
 var h1El = document.querySelector("h1");
 var h3El = document.querySelector("h3");
 var pEl = document.querySelectorAll("p");
+var formEl = document.createElement("form");
+var inputTextEl = document.createElement("input");
+var inputSubmitEl = document.createElement("input");
+var timerInterval;
 
 function setTime() {
     // Sets interval in variable
-    var timerInterval = setInterval(function() {
+    timerInterval = setInterval(function() {
       secondsLeft--;
       timerEl.textContent = "Time: " + secondsLeft;
   
@@ -21,11 +25,29 @@ function setTime() {
     }, 1000);
 }
 
+function handleTimeout(text) {
+    h1El.textContent = text;
+    for(var i=0; i<buttonEl.length; i++){
+        buttonEl[i].setAttribute("style", "display: none;");
+    }
+    inputTextEl.setAttribute("type", "text");
+    inputSubmitEl.setAttribute("type", "submit");
+    inputTextEl.setAttribute("style", "display: block;");
+    inputSubmitEl.setAttribute("style", "display: block;");
+    var h3FormEl = document.createElement("h3");
+    h3FormEl.textContent = "Input your initials and submit your time!";
+    formEl.appendChild(h3FormEl);
+    formEl.appendChild(inputTextEl);
+    formEl.appendChild(inputSubmitEl);
+    document.body.appendChild(formEl);
+}
+
 for(var j = 0; j < buttonEl.length; j++){
     buttonEl[j].addEventListener("click", function(event){
         currentQuestion++;
+        var timeout;
         //Checks if last answer was correct
-        if (currentQuestion > 2){
+        if (currentQuestion > 1){
             if (event.target.dataset.answer === "right"){
                 h3El.textContent = "Correct!";
              } else if (event.target.dataset.answer === "wrong"){
@@ -35,6 +57,7 @@ for(var j = 0; j < buttonEl.length; j++){
         }
         //Sets the current question, sets buttons as answers
         if (currentQuestion === 1){
+            timeout = setTimeout(handleTimeout("Sorry, you ran out of time!"), (secondsLeft*1000));
             setTime();
             for(var i = 1; i<pEl.length; i++){
                 pEl[i].setAttribute("style", "display: none;");
@@ -83,10 +106,12 @@ for(var j = 0; j < buttonEl.length; j++){
         } else{
             finalScore = secondsLeft;
             h1El.textContent = "Quiz Complete!";
-
             for(var i = 0; i<buttonEl.length; i++){
                 buttonEl[i].setAttribute("style", "display: none;");
             }
+            clearInterval(timerInterval);
+            clearTimeout(timeout);
+            handleTimeout("You completed the quiz!");
         };
     });
 }
